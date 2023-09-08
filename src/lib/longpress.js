@@ -1,10 +1,3 @@
-You are a frontend developer building a interactive web application, the application resolution is 1920x1080.
-You are using Sveltekit and tailwind for developement.
-You must use JavaScript type documentation.
-
-will this code work on ipad?
-
-
 /**
  * @param {{ dispatchEvent: (arg0: CustomEvent<any>) => void; addEventListener: (arg0: string, arg1: { (e: any): void; (e: any): void; }) => void; removeEventListener: (arg0: string, arg1: { (e: any): void; (e: any): void; }) => void; }} node
  */
@@ -18,10 +11,8 @@ export function longpress(node) {
    * @param {any} e
    */
   function handleMouseDown(e) {
-    console.log("mouse down");
     window.addEventListener("mousemove", handleMoveBeforeLong);
     timeoutPtr = window.setTimeout(() => {
-      console.log("looooong press!");
       window.removeEventListener("mousemove", handleMoveBeforeLong);
       node.dispatchEvent(new CustomEvent("long"));
       // TODO - ideally make this not trigger long press again
@@ -32,7 +23,6 @@ export function longpress(node) {
    * @param {any} e
    */
   function handleMoveBeforeLong(e) {
-    console.log("move before long");
     window.clearTimeout(timeoutPtr);
     window.removeEventListener("mousemove", handleMoveBeforeLong);
   }
@@ -40,7 +30,6 @@ export function longpress(node) {
    * @param {any} e
    */
   function handleMouseUp(e) {
-    console.log("mouse up");
     window.clearTimeout(timeoutPtr);
     window.removeEventListener("mousemove", handleMoveBeforeLong);
   }

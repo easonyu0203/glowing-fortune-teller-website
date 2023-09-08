@@ -40,11 +40,15 @@
     card17,
     card18,
   ];
-  let src = cards[cardId - 1];
+  let src = 1 <= cardId && cardId <= 18 ? cards[cardId - 1] : null;
 </script>
 
-<img
-  {src}
-  alt="card"
-  class={className + " shadow-[0_0_15px_0_rgba(9,33,40,0.75)]"}
-/>
+{#if src}
+  <img
+    {src}
+    alt="card"
+    class={className + " shadow-[0_0_15px_0_rgba(9,33,40,0.75)]"}
+  />
+{:else}
+  <div class={className + " opacity-0"} />
+{/if}
