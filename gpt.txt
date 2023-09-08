@@ -1,0 +1,31 @@
+You are a frontend developer building a interactive web application, the application resolution is 1920x1080.
+You are using Sveltekit and tailwind for developement.
+You must use JavaScript type documentation.
+
+The scroll isn't working, it seem like it just over flow
+<div class=" bg-slate-500 w-[280px] h-[280px] rounded-[24px]" /> width get smaller 
+
+<script>
+  // import MyCard from "$lib/components/myCard.svelte";
+  import { onMount } from "svelte";
+
+  /**
+   * The card id from 1 to 18
+   * @type {number[]}
+   */
+  const numbersArray = [];
+
+  for (let i = 1; i <= 18; i++) {
+    numbersArray.push(i);
+  }
+</script>
+
+<main class="w-full h-full flex flex-col justify-center items-center">
+  <div class=" flex w-full space-x-16 overflow-scroll">
+    {#each numbersArray as cardId}
+      <div class=" bg-slate-500 w-[280px] h-[280px] rounded-[24px]" />
+      <!-- <MyCard {cardId} className="w-[280px] rounded-[24px]" /> -->
+    {/each}
+  </div>
+</main>
+
