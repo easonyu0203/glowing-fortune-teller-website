@@ -44,11 +44,16 @@
 </script>
 
 {#if src}
-  <img
-    {src}
-    alt="card"
-    class={className + " shadow-[0_0_15px_0_rgba(9,33,40,0.75)]"}
-  />
+  <div class={className + " relative"}>
+    <img
+      {src}
+      alt="card"
+      class={className + " shadow-[0_0_15px_0_rgba(9,33,40,0.75)]"}
+    />
+    <div
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    />
+  </div>
 {:else}
   <div class={className + " opacity-0"} />
 {/if}

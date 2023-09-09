@@ -49,6 +49,7 @@
 
   let isCardHolderOn = false;
   let cardHolderTweened = tweened(1, {
+    delay: 100,
     duration: 1000,
     easing: cubicOut,
   });
@@ -67,7 +68,7 @@
   }
 
   let CardsInGroundDragDisabled = true;
-  let CardsInHolderDragDisabled = true;
+  let CardsInHolderDragDisabled = false;
 
   // @ts-ignore
   function handleConsiderCardsInGround(e) {
@@ -111,15 +112,23 @@
     cardsInHolder = e.detail.items;
   }
 
+  /**
+   * DND
+   * @param e {any}
+   */
+  function handleFinalizeCardsInHolder(e) {
+    cardsInHolder = e.detail.items;
+
+    if (cardsInHolder.length === 5) {
+      toggleCardHolder();
+    }
+  }
+
   onMount(() => {
     scrollContainer.scrollLeft =
       (scrollContainer.scrollWidth - scrollContainer.clientWidth) / 2;
     // toggleCardHolder();
   });
-
-  $: if (cardsInHolder.length >= 5) {
-    toggleCardHolder(1);
-  }
 </script>
 
 <main
@@ -161,14 +170,14 @@
   >
     <img src={CardHolder} class=" absolute top-0 left-0" alt="card-holder" />
     <section
-      class=" absolute top-[24px] left-[41px] flex items-center w-[1410px] h-[390px] px-[10px] space-x-[51px] border-yellow-200 border-2"
+      class=" absolute top-[24px] left-[41px] flex items-center w-[1410px] h-[390px] px-[10px] space-x-[51px]"
       use:dndzone={{
         items: cardsInHolder,
         flipDurationMs,
         dragDisabled: CardsInHolderDragDisabled,
       }}
       on:consider={handleCardsInHolder}
-      on:finalize={handleCardsInHolder}
+      on:finalize={handleFinalizeCardsInHolder}
     >
       {#each cardsInHolder as card (card.id)}
         <div animate:flip={{ duration: flipDurationMs }}>
@@ -177,7 +186,7 @@
       {/each}
     </section>
     <div
-      class=" absolute left-[41px] bottom-[50px] w-[1410px] flex flex-col items-center justify-center border-2 border-yellow-500"
+      class=" absolute left-[41px] bottom-[50px] w-[1410px] flex flex-col items-center justify-center"
     >
       <div class=" text-[#FFE9D4] text-[40px] font-[300]">
         確認興趣卡之後，一起來探究「為什麼」喜歡這5項興趣吧！

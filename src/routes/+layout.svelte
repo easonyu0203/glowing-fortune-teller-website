@@ -7,6 +7,9 @@
   import { CustomEase } from "gsap/all";
 
   gsap.registerPlugin(CustomEase);
+  document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+  });
 </script>
 
 <svelte:head>
