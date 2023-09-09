@@ -18,7 +18,7 @@
    * The card id from 1 to 18
    * @type {{id: number}[]}
    */
-  let cardsInHolder = [{ id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }];
+  let cardsInHolder = [{ id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }];
 
   for (let i = 1; i <= 18; i++) {
     cardsInGround.push({ id: i });

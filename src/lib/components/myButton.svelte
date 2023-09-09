@@ -11,7 +11,7 @@
 
 <button
   on:click={onclick}
-  class=" my-bnt mt-[80px] w-[368px] font-bold h-[107px] bg-[#FFD78A] rounded-[32px] shadow-[0_12px_15px_0_rgba(9,33,40,1)] border-[#6F3D0F] border-[5px] text-[#6B350D] text-4xl"
+  class=" my-bnt mt-[80px] w-[368px] font-bold h-[107px] bg-[#FFD78A] rounded-[32px] shadow-[0_12px_15px_0_rgba(9,33,40,0.8)] border-[#6F3D0F] border-[5px] text-[#6B350D] text-4xl"
 >
   <slot />
 </button>
