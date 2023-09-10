@@ -1,6 +1,7 @@
 <script>
   import MyCard from "$lib/components/myCard.svelte";
   import CardHolder from "$lib/images/pickCards/CardHolder.png";
+  import InfoText from "$lib/images/pickCards/infotext.png";
   import { onMount } from "svelte";
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
@@ -8,6 +9,18 @@
   import { flip } from "svelte/animate";
   import { longpress } from "$lib/longpress";
   import MyButton from "$lib/components/myButton.svelte";
+  import { gsap } from "gsap";
+  import { CustomEase } from "gsap/all";
+  import { fade } from "svelte/transition";
+  import { goto } from "$app/navigation";
+
+  gsap.registerPlugin(CustomEase);
+
+  CustomEase.create(
+    "custom",
+    "M0,0 C0.133,-0.351 0.736,1.062 0.868,1.074 0.948,1.081 0.978,1 1,1 "
+  );
+
   const flipDurationMs = 200;
 
   /**
@@ -24,6 +37,14 @@
     cardsInGround.push({ id: i });
   }
 
+  function reset() {
+    cardsInGround = [];
+    for (let i = 1; i <= 18; i++) {
+      cardsInGround.push({ id: i });
+    }
+    cardsInHolder = [];
+  }
+
   /**
    * @type {HTMLDivElement}
    */
@@ -34,6 +55,7 @@
    * @type {number}
    */
   let scrollPercentage = 0;
+  const centerPos = { x: 960, y: -1605 };
 
   /**
    * Compute the scroll percentage based on scroll position
@@ -53,13 +75,14 @@
     duration: 1000,
     easing: cubicOut,
   });
-  function toggleCardHolder(on = 1) {
-    if ($cardHolderTweened == on) {
+
+  function toggleCardHolder() {
+    if ($cardHolderTweened == 1) {
       cardHolderTweened.set(0);
       isCardHolderOn = false;
       CardsInGroundDragDisabled = true;
       CardsInHolderDragDisabled = true;
-    } else if ($cardHolderTweened == on) {
+    } else {
       cardHolderTweened.set(1);
       isCardHolderOn = true;
       CardsInGroundDragDisabled = false;
@@ -123,20 +146,40 @@
     }
   }
 
+  let scrollPerObj = { value: 0.5 };
   onMount(() => {
     scrollContainer.scrollLeft =
-      (scrollContainer.scrollWidth - scrollContainer.clientWidth) / 2;
-    // toggleCardHolder();
+      scrollContainer.scrollWidth - scrollContainer.clientWidth;
+    // animate from left to right
+    gsap.from(scrollPerObj, {
+      value: 1,
+      duration: 1.5,
+      ease: "custom",
+      onUpdate: () => {
+        scrollContainer.scrollLeft =
+          (scrollContainer.scrollWidth - scrollContainer.clientWidth) *
+          scrollPerObj.value;
+      },
+    });
+
+    // scrollContainer.style.overflowX = "scroll";
   });
 </script>
 
 <main
+  in:fade={{ duration: 1000, delay: 100 }}
+  out:fade={{ duration: 400 }}
   class="w-full h-full flex flex-col justify-center items-center relative overflow-clip"
 >
+  <img
+    class=" absolute left-1/2 bottom-[280px] translate-x-[-50%]"
+    src={InfoText}
+    alt="info text"
+  />
   <div
     bind:this={scrollContainer}
     on:scroll={handleScroll}
-    class=" circle-container flex w-full h-full relative items-center space-x-[100px] overflow-x-scroll no-scrollbar"
+    class=" circle-container flex w-full h-full relative top-[-100px] items-center space-x-[100px] overflow-x-scroll no-scrollbar"
   >
     <div class="min-w-[600px] w-[600px] h-[390px] relative m-4 opacity-0" />
     <section
@@ -193,8 +236,13 @@
         確認興趣卡之後，一起來探究「為什麼」喜歡這5項興趣吧！
       </div>
       <div class=" flex items-center justify-center space-x-[100px]">
-        <MyButton>重新選擇</MyButton>
-        <MyButton>確認卡牌</MyButton>
+        <MyButton
+          onclick={() => {
+            reset();
+            toggleCardHolder();
+          }}>重新選擇</MyButton
+        >
+        <a href="/instruction"> <MyButton>確認卡牌</MyButton></a>
       </div>
     </div>
   </div>
