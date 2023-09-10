@@ -2,17 +2,18 @@
   import MyCard from "$lib/components/myCard.svelte";
   import CardHolder from "$lib/images/pickCards/CardHolder.png";
   import InfoText from "$lib/images/pickCards/infotext.png";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
   import { dndzone, SOURCES, TRIGGERS } from "svelte-dnd-action";
   import { flip } from "svelte/animate";
-  import { longpress } from "$lib/longpress";
+  import { press } from "svelte-gestures";
   import MyButton from "$lib/components/myButton.svelte";
   import { gsap } from "gsap";
   import { CustomEase } from "gsap/all";
   import { fade } from "svelte/transition";
   import { goto } from "$app/navigation";
+  import mousePosition from "$lib/mousePosition";
 
   gsap.registerPlugin(CustomEase);
 
@@ -122,8 +123,16 @@
   /**
    * @param {any} e
    */
-  function CardsInGroundStartDrag(e) {
+  async function CardsInGroundStartDrag(e) {
     CardsInGroundDragDisabled = false;
+
+    await tick();
+    // trigger mouse down event for the target on the mouse position of the screen
+    const mouseDownEvent = new MouseEvent("mousedown", {
+      clientX: $mousePosition.x,
+      clientY: $mousePosition.y,
+    });
+    e.target.dispatchEvent(mouseDownEvent);
   }
 
   /**
@@ -197,8 +206,8 @@
         <div
           class="min-w-[280px] w-[280px] h-[390px] relative m-4"
           animate:flip={{ duration: flipDurationMs }}
-          use:longpress
-          on:long={CardsInGroundStartDrag}
+          use:press={{ timeframe: 150, triggerBeforeFinished: true }}
+          on:press={CardsInGroundStartDrag}
         >
           <MyCard cardId={card.id} className=" h-[390px] rounded-[24px]" />
         </div>
