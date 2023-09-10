@@ -100,7 +100,6 @@
    * @param {any} e
    */
   function CardsInGroundStartDrag(e) {
-    console.log("star");
     CardsInGroundDragDisabled = false;
   }
 
@@ -146,6 +145,7 @@
         items: cardsInGround,
         dragDisabled: CardsInGroundDragDisabled,
         flipDurationMs,
+        dropTargetStyle: {},
       }}
       on:consider={handleConsiderCardsInGround}
       on:finalize={handleFinalizeCardsInGround}
@@ -175,6 +175,7 @@
         items: cardsInHolder,
         flipDurationMs,
         dragDisabled: CardsInHolderDragDisabled,
+        dropTargetStyle: {},
       }}
       on:consider={handleCardsInHolder}
       on:finalize={handleFinalizeCardsInHolder}
