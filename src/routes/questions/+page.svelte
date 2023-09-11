@@ -11,6 +11,11 @@
   /** @type {import('./$types').PageData} */
   export let data;
 
+  /**
+   * @type {HTMLDivElement}
+   */
+  let optionsRef;
+
   let currentCardNum = 1;
   /**
    * The card id from 1 to 18
@@ -84,18 +89,24 @@
         </div>
         <div class=" flex flex-col my-[54px] mx-[47px]">
           <div
+            bind:this={optionsRef}
             id="options"
-            class=" p-4 w-[1088px] h-[471px] bg-[#F9DBB2] rounded-[24px] space-y-2 overflow-y-scroll no-scrollbar overflow-x-clip shadow-[inset_0_10px_10px_0_rgba(0,0,0,0.25)]"
+            class=" p-4 w-[1088px] h-[471px] bg-[#F9DBB2] rounded-[24px] shadow-[inset_0_10px_10px_0_rgba(0,0,0,0.25)]"
           >
             {#key currentCardNum}
-              {#each currentOptions as option}
-                <Toggle
-                  on:toggle={(e) => {
-                    currentSelectCnt += e.detail.amount;
-                    option.isOn = e.detail.isOn;
-                  }}>{option.原因}</Toggle
-                >
-              {/each}
+              <div
+                in:fade={{ duration: 300 }}
+                class=" w-full h-full space-y-2 overflow-y-scroll no-scrollbar overflow-x-clip"
+              >
+                {#each currentOptions as option}
+                  <Toggle
+                    on:toggle={(e) => {
+                      currentSelectCnt += e.detail.amount;
+                      option.isOn = e.detail.isOn;
+                    }}>{option.原因}</Toggle
+                  >
+                {/each}
+              </div>
             {/key}
           </div>
           <div id="option-text" class=" flex justify-between pt-6">
@@ -161,6 +172,10 @@
               // to next card
               currentCardNum += 1;
               currentSelectCnt = 0;
+              //scroll to top
+              if (optionsRef) {
+                optionsRef.scrollTop = 0;
+              }
             }
           }}
           disabled={!allowNext}
