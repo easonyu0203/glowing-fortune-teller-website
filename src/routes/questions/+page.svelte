@@ -39,8 +39,8 @@
 </script>
 
 <main
-  in:fly={{ duration: 1000, y: 1500 }}
-  out:fly={{ duration: 400 }}
+  in:fly={{ duration: 1500, y: 1500 }}
+  out:fly={{ duration: 1500, y: 1500 }}
   class="w-full h-full flex flex-col absolute justify-center items-center"
 >
   <div class=" h-[1000px] w-[1840px] flex flex-col rounded-[24px]">
