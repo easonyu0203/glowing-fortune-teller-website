@@ -1,6 +1,7 @@
 <script>
   export let className = "";
   export let cardId = 1;
+  import { fade } from "svelte/transition";
   import card1 from "$lib/images/cards/1益智.jpg";
   import card2 from "$lib/images/cards/2閱讀.jpg";
   import card3 from "$lib/images/cards/3命運.jpg";
@@ -44,7 +45,7 @@
 </script>
 
 {#if src}
-  <div class={className + " relative"}>
+  <div transition:fade={{ duration: 1000 }} class={className + " relative"}>
     <img
       {src}
       alt="card"

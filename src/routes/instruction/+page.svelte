@@ -7,7 +7,7 @@
 
 <main
   in:fade={{ duration: 1000, delay: 500 }}
-  out:fade={{ duration: 400 }}
+  out:fade={{ duration: 400, delay: 2000 }}
   class="w-full h-full flex flex-col absolute justify-center space-y-[100px] items-center"
 >
   <div

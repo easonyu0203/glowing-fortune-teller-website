@@ -1,4 +1,185 @@
 <script>
+  import { fly, fade } from "svelte/transition";
+  import cardBack from "$lib/images/cards/cardBack.png";
+  import Icon from "@iconify/svelte";
+  import MyCard from "$lib/components/myCard.svelte";
+  import Toggle from "$lib/components/questions/toggle.svelte";
+  import gameState from "$lib/stores/gameState";
+  import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
+
   /** @type {import('./$types').PageData} */
   export let data;
+
+  let currentCardNum = 1;
+  /**
+   * The card id from 1 to 18
+   * @type {1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18}
+   */
+  // @ts-ignore
+  $: currentCardId = $gameState.cardsInHolder[currentCardNum - 1].id;
+  /**
+   * @type {{原因: string, 類型: number, isOn: boolean}[]}
+   */
+  // @ts-ignore
+  $: currentOptions = data[currentCardId].reasons.map((e) => {
+    // add isOn property
+    // @ts-ignore
+    e.isOn = false;
+    return e;
+  });
+  let currentSelectCnt = 0;
+  $: allowNext = currentSelectCnt >= 0;
+
+  onMount(() => {
+    if ($gameState.cardsInHolder.length < 5) {
+      goto("pick-cards");
+    }
+  });
 </script>
+
+<main
+  in:fly={{ duration: 1000, y: 1500 }}
+  out:fly={{ duration: 400 }}
+  class="w-full h-full flex flex-col absolute justify-center items-center"
+>
+  <div class=" h-[1000px] w-[1840px] flex flex-col rounded-[24px]">
+    <div
+      class=" w-full h-[147px] flex-grow-0 bg-[#f4cfa1] rounded-t-[24px] text-[40px] font-[400] text-[#551A19] flex items-center justify-center"
+    >
+      試想你「為什麼」喜歡這個興趣活動，點選卡牌查看活動介紹，並勾選「符合」的原因。
+    </div>
+    <div class="w-full flex-grow bg-[#FCEED0] rounded-b-[24px] flex flex-col">
+      <div class=" flex-grow flex">
+        <div
+          id="cards"
+          class=" relative flex-grow flex justify-center items-center"
+        >
+          <img
+            src={cardBack}
+            class=" absolute rotate-[20deg] w-[392px] h-[549px]"
+            alt="cardBack"
+          />
+          <img
+            src={cardBack}
+            class=" absolute rotate-[10deg] w-[392px] h-[549px]"
+            alt="cardBack"
+          />
+          <img
+            src={cardBack}
+            class=" absolute rotate-[-20deg] w-[392px] h-[549px]"
+            alt="cardBack"
+          />
+          {#key currentCardId}
+            <div
+              transition:fade={{ duration: 300 }}
+              class=" absolute w-[350px] h-[490px] rounded-[24px]"
+            >
+              <MyCard
+                cardId={currentCardId}
+                className=" absolute w-[350px] h-[490px] rounded-[24px]"
+              />
+            </div>
+          {/key}
+        </div>
+        <div class=" flex flex-col my-[54px] mx-[47px]">
+          <div
+            id="options"
+            class=" p-4 w-[1088px] h-[471px] bg-[#F9DBB2] rounded-[24px] space-y-2 overflow-y-scroll no-scrollbar overflow-x-clip shadow-[inset_0_10px_10px_0_rgba(0,0,0,0.25)]"
+          >
+            {#key currentCardNum}
+              {#each currentOptions as option}
+                <Toggle
+                  on:toggle={(e) => {
+                    currentSelectCnt += e.detail.amount;
+                    option.isOn = e.detail.isOn;
+                  }}>{option.原因}</Toggle
+                >
+              {/each}
+            {/key}
+          </div>
+          <div id="option-text" class=" flex justify-between pt-6">
+            <div class="flex space-x-2 justify-center items-center">
+              <Icon
+                class=" relative top-[-2px]"
+                icon="teenyicons:bulb-off-outline"
+                color="#63350a"
+                width="48"
+                height="48"
+              />
+              <div class=" font-[400] text-[32px] text-[#63350a]">
+                謮至小選擇6個原因喔！
+              </div>
+            </div>
+            <div class=" font-[400] text-[32px] text-[#63350a]">
+              巳選擇{currentSelectCnt}項
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex h-[200px] items-center justify-between px-12 relative top-[-30px]"
+      >
+        <div class="flex">
+          {#each [1, 2, 3, 4, 5] as cardNum}
+            <div
+              class={`w-[288px] h-[71px] border-[#63350A] border-4 font-[500] text-[32px] text-[#63350A] flex justify-center items-center
+               ${
+                 cardNum <= currentCardNum
+                   ? "bg-gradient-to-b from-[#F9DD7C] from-80% to-[#D06B0E]"
+                   : "bg-gradient-to-b from-[#D4B288] to-[#FEF8EB] to-30%"
+               }`}
+              style={cardNum == 1
+                ? "border-top-left-radius: 24px;border-bottom-left-radius: 24px; border-right-width: 0px"
+                : cardNum == 5
+                ? "border-top-right-radius: 24px;border-bottom-right-radius: 24px;"
+                : "border-right-width: 0px"}
+            >
+              卡牌 {cardNum}
+            </div>
+          {/each}
+        </div>
+        <button
+          class={` w-[232px] h-[107px] text-[40px] font-[600] border-[5px] rounded-[24px] border-[#6B350D] bg-gradient-to-b ${
+            allowNext
+              ? "from-[#FFD78A] from-65% to-[#C98A2C]"
+              : "from-[#E3E3E3] to-[#8E8E8E] from-50%"
+          }`}
+          on:click={() => {
+            // add options to game state
+            let chooseTypes = currentOptions
+              .filter((e) => e.isOn)
+              .map((e) => e.類型);
+            chooseTypes = chooseTypes.flat();
+
+            $gameState.choosedTypesList.push(...chooseTypes);
+
+            if (currentCardNum == 5) {
+              // analyze
+              goto("/loading");
+            } else {
+              // to next card
+              currentCardNum += 1;
+            }
+          }}
+          disabled={!allowNext}
+        >
+          {currentCardNum == 5 ? "分析" : "Next"}
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<style>
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+</style>

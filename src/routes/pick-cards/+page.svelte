@@ -12,8 +12,8 @@
   import { gsap } from "gsap";
   import { CustomEase } from "gsap/all";
   import { fade } from "svelte/transition";
-  import { goto } from "$app/navigation";
-  import mousePosition from "$lib/mousePosition";
+  import mousePosition from "$lib/stores/mousePosition";
+  import gameState from "$lib/stores/gameState";
 
   gsap.registerPlugin(CustomEase);
 
@@ -27,24 +27,12 @@
   /**
    * @type {{id: number}[]}
    */
-  let cardsInGround = [];
+  $: cardsInGround = $gameState.cardsInGround;
   /**
    * The card id from 1 to 18
    * @type {{id: number}[]}
    */
-  let cardsInHolder = [{ id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }];
-
-  for (let i = 1; i <= 18; i++) {
-    cardsInGround.push({ id: i });
-  }
-
-  function reset() {
-    cardsInGround = [];
-    for (let i = 1; i <= 18; i++) {
-      cardsInGround.push({ id: i });
-    }
-    cardsInHolder = [];
-  }
+  $: cardsInHolder = $gameState.cardsInHolder;
 
   /**
    * @type {HTMLDivElement}
@@ -247,7 +235,7 @@
       <div class=" flex items-center justify-center space-x-[100px]">
         <MyButton
           onclick={() => {
-            reset();
+            gameState.reset();
             toggleCardHolder();
           }}>重新選擇</MyButton
         >

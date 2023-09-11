@@ -2,7 +2,7 @@
   import "../app.css";
   import northPole from "$lib/images/northPole.png";
   import bg from "$lib/images/bg.png";
-  import EarthLongLatitude from "$lib/earthLongLatitude.svelte";
+  import EarthLongLatitude from "$lib/components/earthLongLatitude.svelte";
   import { gsap } from "gsap";
   import { CustomEase } from "gsap/all";
 
