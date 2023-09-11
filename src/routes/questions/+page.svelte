@@ -29,7 +29,7 @@
     return e;
   });
   let currentSelectCnt = 0;
-  $: allowNext = currentSelectCnt >= 0;
+  $: allowNext = currentSelectCnt >= 6;
 
   onMount(() => {
     if ($gameState.cardsInHolder.length < 5) {
@@ -160,6 +160,7 @@
             } else {
               // to next card
               currentCardNum += 1;
+              currentSelectCnt = 0;
             }
           }}
           disabled={!allowNext}

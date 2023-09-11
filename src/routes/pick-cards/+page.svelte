@@ -25,16 +25,6 @@
   const flipDurationMs = 200;
 
   /**
-   * @type {{id: number}[]}
-   */
-  $: cardsInGround = $gameState.cardsInGround;
-  /**
-   * The card id from 1 to 18
-   * @type {{id: number}[]}
-   */
-  $: cardsInHolder = $gameState.cardsInHolder;
-
-  /**
    * @type {HTMLDivElement}
    */
   let scrollContainer;
@@ -88,7 +78,7 @@
       items: newItems,
       info: { source, trigger },
     } = e.detail;
-    cardsInGround = newItems;
+    $gameState.cardsInGround = newItems;
     // Ensure dragging is stopped on drag finish via keyboard
     if (source === SOURCES.KEYBOARD && trigger === TRIGGERS.DRAG_STOPPED) {
       CardsInGroundDragDisabled = true;
@@ -102,7 +92,7 @@
       items: newItems,
       info: { source },
     } = e.detail;
-    cardsInGround = newItems;
+    $gameState.cardsInGround = newItems;
     // Ensure dragging is stopped on drag finish via pointer (mouse, touch)
     if (source === SOURCES.POINTER) {
       CardsInGroundDragDisabled = true;
@@ -128,7 +118,7 @@
    * @param e {any}
    */
   function handleCardsInHolder(e) {
-    cardsInHolder = e.detail.items;
+    $gameState.cardsInHolder = e.detail.items;
   }
 
   /**
@@ -136,9 +126,9 @@
    * @param e {any}
    */
   function handleFinalizeCardsInHolder(e) {
-    cardsInHolder = e.detail.items;
+    $gameState.cardsInHolder = e.detail.items;
 
-    if (cardsInHolder.length === 5) {
+    if ($gameState.cardsInHolder.length === 5) {
       toggleCardHolder();
     }
   }
@@ -182,7 +172,7 @@
     <section
       class=" space-x-[100px] flex"
       use:dndzone={{
-        items: cardsInGround,
+        items: $gameState.cardsInGround,
         dragDisabled: CardsInGroundDragDisabled,
         flipDurationMs,
         dropTargetStyle: {},
@@ -190,11 +180,11 @@
       on:consider={handleConsiderCardsInGround}
       on:finalize={handleFinalizeCardsInGround}
     >
-      {#each cardsInGround as card (card.id)}
+      {#each $gameState.cardsInGround as card (card.id)}
         <div
           class="min-w-[280px] w-[280px] h-[390px] relative m-4"
           animate:flip={{ duration: flipDurationMs }}
-          use:press={{ timeframe: 150, triggerBeforeFinished: true }}
+          use:press={{ timeframe: 100, triggerBeforeFinished: true }}
           on:press={CardsInGroundStartDrag}
         >
           <MyCard cardId={card.id} className=" h-[390px] rounded-[24px]" />
@@ -212,7 +202,7 @@
     <section
       class=" absolute top-[24px] left-[41px] flex items-center w-[1410px] h-[390px] px-[10px] space-x-[51px]"
       use:dndzone={{
-        items: cardsInHolder,
+        items: $gameState.cardsInHolder,
         flipDurationMs,
         dragDisabled: CardsInHolderDragDisabled,
         dropTargetStyle: {},
@@ -220,7 +210,7 @@
       on:consider={handleCardsInHolder}
       on:finalize={handleFinalizeCardsInHolder}
     >
-      {#each cardsInHolder as card (card.id)}
+      {#each $gameState.cardsInHolder as card (card.id)}
         <div animate:flip={{ duration: flipDurationMs }}>
           <MyCard cardId={card.id} className=" h-[330px] rounded-[24px]" />
         </div>
