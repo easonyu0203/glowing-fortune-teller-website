@@ -36,7 +36,7 @@
   });
   let currentSelectCnt = 0;
 
-  $: allowNext = dev ? currentSelectCnt >= 0 : currentSelectCnt >= 6;
+  $: allowNext = dev ? currentSelectCnt >= 1 : currentSelectCnt >= 6;
 
   onMount(() => {
     if ($gameState.cardsInHolder.length < 5) {
@@ -64,17 +64,17 @@
         >
           <img
             src={cardBack}
-            class=" absolute rotate-[20deg] w-[392px] h-[549px]"
+            class=" absolute rounded-2xl rotate-[20deg] w-[392px] h-[549px]"
             alt="cardBack"
           />
           <img
             src={cardBack}
-            class=" absolute rotate-[10deg] w-[392px] h-[549px]"
+            class=" absolute rounded-2xl rotate-[10deg] w-[392px] h-[549px]"
             alt="cardBack"
           />
           <img
             src={cardBack}
-            class=" absolute rotate-[-20deg] w-[392px] h-[549px]"
+            class=" absolute rounded-2xl rotate-[-20deg] w-[392px] h-[549px]"
             alt="cardBack"
           />
           {#key currentCardId}
@@ -155,8 +155,8 @@
         <button
           class={` w-[232px] h-[107px] text-[40px] font-[600] border-[5px] rounded-[24px] border-[#6B350D] bg-gradient-to-b ${
             allowNext
-              ? "from-[#FFD78A] from-65% to-[#C98A2C]"
-              : "from-[#E3E3E3] to-[#8E8E8E] from-50%"
+              ? "from-[#FFD78A] from-65% to-[#C98A2C] text-[#6B350D]"
+              : "from-[#E3E3E3] to-[#8E8E8E] from-50% text-[#69615C]"
           }`}
           on:click={() => {
             // add options to game state

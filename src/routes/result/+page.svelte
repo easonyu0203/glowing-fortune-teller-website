@@ -23,7 +23,7 @@
         <div>掃描下載</div>
         <div>分析說明</div>
       </div>
-      <MyQrCode width={122} index={data.mostCommonTypes[typeIndex]} />
+      <MyQrCode index={data.mostCommonTypes[typeIndex]} />
     </div>
   </div>
 

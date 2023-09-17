@@ -7,7 +7,7 @@
   import { cubicOut } from "svelte/easing";
   import { dndzone, SOURCES, TRIGGERS } from "svelte-dnd-action";
   import { flip } from "svelte/animate";
-  import { press } from "svelte-gestures";
+  import { press, tap } from "svelte-gestures";
   import MyButton from "$lib/components/myButton.svelte";
   import { gsap } from "gsap";
   import { CustomEase } from "gsap/all";
@@ -106,10 +106,11 @@
 
     await tick();
     // trigger mouse down event for the target on the mouse position of the screen
-    const mouseDownEvent = new MouseEvent("mousedown", {
+    let mouseDownEvent = new MouseEvent("mousedown", {
       clientX: $mousePosition.x,
       clientY: $mousePosition.y,
     });
+
     e.target.dispatchEvent(mouseDownEvent);
   }
 
@@ -148,8 +149,6 @@
           scrollPerObj.value;
       },
     });
-
-    // scrollContainer.style.overflowX = "scroll";
   });
 </script>
 
@@ -184,10 +183,14 @@
         <div
           class="min-w-[280px] w-[280px] h-[390px] relative m-4"
           animate:flip={{ duration: flipDurationMs }}
-          use:press={{ timeframe: 100, triggerBeforeFinished: true }}
+          use:press={{ timeframe: 300, triggerBeforeFinished: true }}
           on:press={CardsInGroundStartDrag}
         >
-          <MyCard cardId={card.id} className=" h-[390px] rounded-[24px]" />
+          <MyCard
+            cardId={card.id}
+            flipplable={true}
+            className=" h-[390px] rounded-[24px]"
+          />
         </div>
       {/each}
     </section>
@@ -200,7 +203,7 @@
   >
     <img src={CardHolder} class=" absolute top-0 left-0" alt="card-holder" />
     <section
-      class=" absolute top-[24px] left-[41px] flex items-center w-[1410px] h-[390px] px-[10px] space-x-[51px]"
+      class=" absolute top-[24px] left-[26px] flex items-center w-[1410px] h-[390px] px-[10px] space-x-[16px]"
       use:dndzone={{
         items: $gameState.cardsInHolder,
         flipDurationMs,
@@ -212,7 +215,10 @@
     >
       {#each $gameState.cardsInHolder as card (card.id)}
         <div animate:flip={{ duration: flipDurationMs }}>
-          <MyCard cardId={card.id} className=" h-[330px] rounded-[24px]" />
+          <MyCard
+            cardId={card.id}
+            className=" w-[240px] h-[330px] rounded-[24px]"
+          />
         </div>
       {/each}
     </section>

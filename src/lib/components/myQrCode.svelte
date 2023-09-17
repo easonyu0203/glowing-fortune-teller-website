@@ -12,14 +12,9 @@
   import r11 from "$lib/images/qrcode/result11-服務.png";
   import r12 from "$lib/images/qrcode/result12-自然.png";
 
-  export let width = 300;
   export let index = 0;
 
   const data = [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12];
 </script>
 
-<img
-  src={data[index - 1]}
-  alt="qr-code"
-  class={`w-[${width}px] h-[${width}px]`}
-/>
+<img src={data[index - 1]} alt="qr-code" class={`w-[122px] h-[122px]`} />
