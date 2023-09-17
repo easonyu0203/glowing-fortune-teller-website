@@ -7,6 +7,7 @@
   import gameState from "$lib/stores/gameState";
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { dev } from "$app/environment";
 
   /** @type {import('./$types').PageData} */
   export let data;
@@ -34,7 +35,8 @@
     return e;
   });
   let currentSelectCnt = 0;
-  $: allowNext = currentSelectCnt >= 6;
+
+  $: allowNext = dev ? currentSelectCnt >= 0 : currentSelectCnt >= 6;
 
   onMount(() => {
     if ($gameState.cardsInHolder.length < 5) {

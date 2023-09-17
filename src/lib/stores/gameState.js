@@ -21,7 +21,7 @@ gameState.update((gs) => {
   for (let i = 1; i <= 18; i++) {
     gs.cardsInGround.push({ id: i });
   }
-  gs.cardsInHolder = [];
+  gs.cardsInHolder = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
   return gs;
 });
 

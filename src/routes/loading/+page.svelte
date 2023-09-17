@@ -85,13 +85,13 @@
 >
   <img
     id="card1"
-    class=" w-[150px] absolute top-[400px] left-[900px]"
+    class=" w-[150px] absolute top-[400px] left-[900px] shadow-2xl rounded-lg"
     src={cardBack}
     alt="card-back"
   />
   <img
     id="card2"
-    class=" w-[150px] absolute top-[380px] left-[875px]"
+    class=" w-[150px] absolute top-[380px] left-[875px] shadow-2xl rounded-lg"
     src={cardBack}
     alt="card-back"
   />
