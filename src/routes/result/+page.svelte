@@ -2,9 +2,10 @@
   import { fly, fade } from "svelte/transition";
   import resultText from "$lib/images/result/resultText.png";
   import Icon from "@iconify/svelte";
-
   /** @type {import('./$types').PageData} */
   export let data;
+
+  console.log(data);
 </script>
 
 <main
@@ -24,27 +25,27 @@
   </div>
 
   <div class=" flex overflow-x-scroll w-screen space-x-10 px-14">
-    {#each [1, 2, 3] as tt}
+    {#each data.mostCommonTypes as idx}
       <div class=" flex flex-col w-[1640px] h-[680px]">
         <div
           class=" w-full flex-grow-0 h-[109px] rounded-t-[24px] bg-[#F8D170] text-[48px] flex items-center justify-center font-bold text-[#551A19]"
         >
-          研究型
+          {data.typeData[idx].type}
         </div>
         <div class=" flex-grow bg-[#FFEBC8] rounded-b-[24px] p-6">
           <div class=" text-[#551A19] text-[40px] my-2">
-            <b>特徵</b>：理性、邏輯、學習
+            <b>特徵</b>：{data.typeData[idx].特質}
           </div>
           <div class=" flex">
-            {#each [1, 2, 3, 4] as tmp}
+            {#each data.typeData[idx].entries as entry}
               <div
-                class=" flex flex-col w-[374px] h-[440px] bg-[#FEF8EB] p-7 m-4 rounded-[24px] shadow-[0_2px_10px_0_rgba(9,33,40,0.75)]"
+                class=" flex flex-col w-[374px] h-[440px] space-y-1 bg-[#FEF8EB] px-6 py-4 m-4 rounded-[24px] shadow-[0_2px_10px_0_rgba(9,33,40,0.75)]"
               >
-                <div class=" text-[#551A19] text-[40px] font-bold">
-                  類型說明
+                <div class=" text-[#551A19] text-[36px] font-bold">
+                  {entry[0]}
                 </div>
-                <p class=" text-[#6F3D0F] text-[24px]">
-                  究型的你聦明、理性、邏輯分析強，很喜歡動腦思考與學習，這讓你心中覺得很踏實。你會嘗試不同的方式去解開難題或困難，發現答案的時候會很有成就感。不妨多運用上述的特點來克服你正面臨的困難喔！
+                <p class=" text-[#6F3D0F] overflow-y-scroll text-[23px]">
+                  {@html entry[1]}
                 </p>
               </div>
             {/each}

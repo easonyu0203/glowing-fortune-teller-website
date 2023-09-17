@@ -1,3 +1,4 @@
+import { dev } from "$app/environment";
 import { writable } from "svelte/store";
 
 const gameState = writable({
@@ -21,7 +22,11 @@ gameState.update((gs) => {
   for (let i = 1; i <= 18; i++) {
     gs.cardsInGround.push({ id: i });
   }
-  gs.cardsInHolder = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
+  gs.cardsInHolder = dev
+    ? [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]
+    : [];
+
+  gs.choosedTypesList = dev ? [10, 11, 11] : [];
   return gs;
 });
 
