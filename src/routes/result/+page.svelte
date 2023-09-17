@@ -2,10 +2,13 @@
   import { fly, fade } from "svelte/transition";
   import resultText from "$lib/images/result/resultText.png";
   import Icon from "@iconify/svelte";
+  import gameState from "$lib/stores/gameState";
+  import { goto } from "$app/navigation";
+  import MyQrCode from "$lib/components/myQrCode.svelte";
   /** @type {import('./$types').PageData} */
   export let data;
 
-  console.log(data);
+  let typeIndex = 0;
 </script>
 
 <main
@@ -20,13 +23,20 @@
         <div>掃描下載</div>
         <div>分析說明</div>
       </div>
-      <div class="w-[122px] h-[122px] bg-black text-white">qr code</div>
+      <MyQrCode width={122} index={data.mostCommonTypes[typeIndex]} />
     </div>
   </div>
 
-  <div class=" flex overflow-x-scroll w-screen space-x-10 px-14">
+  <div
+    on:scroll={(e) => {
+      typeIndex = Math.round(
+        e.currentTarget.scrollLeft / e.currentTarget.clientWidth
+      );
+    }}
+    class=" flex overflow-x-scroll carousel carousel-center max-w-[1850px] space-x-5 px-14 py-4"
+  >
     {#each data.mostCommonTypes as idx}
-      <div class=" flex flex-col w-[1640px] h-[680px]">
+      <div class=" carousel-item flex flex-col w-[1640px] h-[680px]">
         <div
           class=" w-full flex-grow-0 h-[109px] rounded-t-[24px] bg-[#F8D170] text-[48px] flex items-center justify-center font-bold text-[#551A19]"
         >
@@ -55,7 +65,7 @@
     {/each}
   </div>
 
-  <div class=" flex space-x-8 pb-8">
+  <div class=" flex space-x-[150px] pb-8 w-full items-center justify-center">
     <div class="flex space-x-2 justify-center items-center pr-4">
       <Icon
         class=" relative top-[-2px]"
@@ -69,10 +79,10 @@
       </div>
     </div>
     <button
-      class=" text-[#6B350D] w-[288px] h-[107px] text-[40px] font-[600] border-[5px] rounded-[24px] border-[#6B350D] bg-gradient-to-b from-[#FFD78A] from-65% to-[#C98A2C]"
-      >重新測驗</button
-    >
-    <button
+      on:click={() => {
+        gameState.reset();
+        goto("start");
+      }}
       class=" text-[#6B350D] w-[288px] h-[107px] text-[40px] font-[600] border-[5px] rounded-[24px] border-[#6B350D] bg-gradient-to-b from-[#FFD78A] from-65% to-[#C98A2C]"
       >完成體驗</button
     >
