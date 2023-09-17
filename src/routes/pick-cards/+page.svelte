@@ -150,6 +150,59 @@
       },
     });
   });
+
+  /**
+   * @param {HTMLDivElement} node
+   * @param {number} delay
+   */
+  function scaleCard(node, delay) {
+    // set duration 300ms
+    node.style.transition = "transform 300ms";
+    /**
+     * @type {number | undefined}
+     */
+    let ref;
+    /**
+     * @type {gsap.core.Tween}
+     */
+    let animateProgress;
+    /**
+     * @type {any}
+     */
+    let progressBar;
+    node.addEventListener("touchstart", () => {
+      // get first child value
+
+      progressBar = node.firstChild;
+      let value = { value: 0 };
+
+      // animate progressBar value from 0 to 100 in 300ms
+      animateProgress = gsap.to(value, {
+        value: 100,
+        duration: 0.3,
+        onUpdate: () => {
+          // set progressBar value
+          progressBar.value = value.value;
+        },
+      });
+
+      ref = setTimeout(() => {
+        node.style.transform = "scale(0.9)";
+      }, delay);
+    });
+    node.addEventListener("touchmove", () => {
+      clearTimeout(ref);
+      animateProgress.kill();
+      progressBar.value = 0;
+      node.style.transform = "scale(1)";
+    });
+    node.addEventListener("touchend", () => {
+      clearTimeout(ref);
+      animateProgress.kill();
+      progressBar.value = 0;
+      node.style.transform = "scale(1)";
+    });
+  }
 </script>
 
 <main
@@ -185,11 +238,17 @@
           animate:flip={{ duration: flipDurationMs }}
           use:press={{ timeframe: 300, triggerBeforeFinished: true }}
           on:press={CardsInGroundStartDrag}
+          use:scaleCard={300}
         >
+          <progress
+            class="absolute bottom-[-30px] left-[50%] translate-x-[-50%] progress w-56"
+            value="0"
+            max="100"
+          />
           <MyCard
             cardId={card.id}
             flipplable={true}
-            className=" h-[390px] rounded-[24px]"
+            className=" h-[390px] rounded-[24px] "
           />
         </div>
       {/each}
@@ -203,7 +262,7 @@
   >
     <img src={CardHolder} class=" absolute top-0 left-0" alt="card-holder" />
     <section
-      class=" absolute top-[24px] left-[26px] flex items-center w-[1410px] h-[390px] px-[10px] space-x-[16px]"
+      class=" absolute top-[23px] left-[26px] flex items-center w-[1410px] h-[390px] px-[10px] space-x-[16px]"
       use:dndzone={{
         items: $gameState.cardsInHolder,
         flipDurationMs,
@@ -214,7 +273,7 @@
       on:finalize={handleFinalizeCardsInHolder}
     >
       {#each $gameState.cardsInHolder as card (card.id)}
-        <div animate:flip={{ duration: flipDurationMs }}>
+        <div animate:flip={{ duration: flipDurationMs }} use:scaleCard={10}>
           <MyCard
             cardId={card.id}
             className=" w-[240px] h-[330px] rounded-[24px]"

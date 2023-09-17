@@ -17,6 +17,11 @@
    */
   let optionsRef;
 
+  /**
+   * @type {HTMLDivElement}
+   */
+  let hintRef;
+
   let currentCardNum = 1;
   /**
    * The card id from 1 to 18
@@ -111,20 +116,21 @@
               </div>
             {/key}
           </div>
-          <div id="option-text" class=" flex justify-between pt-6">
+          <div
+            bind:this={hintRef}
+            id="option-text"
+            class=" flex justify-between pt-6 text-[#63350a]"
+          >
             <div class="flex space-x-2 justify-center items-center">
               <Icon
                 class=" relative top-[-2px]"
                 icon="teenyicons:bulb-off-outline"
-                color="#63350a"
                 width="48"
                 height="48"
               />
-              <div class=" font-[400] text-[32px] text-[#63350a]">
-                謮至小選擇6個原因喔！
-              </div>
+              <div class=" font-[400] text-[32px]">謮至小選擇6個原因喔！</div>
             </div>
-            <div class=" font-[400] text-[32px] text-[#63350a]">
+            <div class=" font-[400] text-[32px]">
               巳選擇{currentSelectCnt}項
             </div>
           </div>
@@ -159,28 +165,34 @@
               : "from-[#E3E3E3] to-[#8E8E8E] from-50% text-[#69615C]"
           }`}
           on:click={() => {
-            // add options to game state
-            let chooseTypes = currentOptions
-              .filter((e) => e.isOn)
-              .map((e) => e.類型);
-            chooseTypes = chooseTypes.flat();
+            if (allowNext) {
+              // add options to game state
+              let chooseTypes = currentOptions
+                .filter((e) => e.isOn)
+                .map((e) => e.類型);
+              chooseTypes = chooseTypes.flat();
 
-            $gameState.choosedTypesList.push(...chooseTypes);
+              $gameState.choosedTypesList.push(...chooseTypes);
 
-            if (currentCardNum == 5) {
-              // analyze
-              goto("/loading");
-            } else {
-              // to next card
-              currentCardNum += 1;
-              currentSelectCnt = 0;
-              //scroll to top
-              if (optionsRef) {
-                optionsRef.scrollTop = 0;
+              if (currentCardNum == 5) {
+                // analyze
+                goto("/loading");
+              } else {
+                // to next card
+                currentCardNum += 1;
+                currentSelectCnt = 0;
+                //scroll to top
+                if (optionsRef) {
+                  optionsRef.scrollTop = 0;
+                }
               }
+            } else {
+              hintRef.classList.add("animate-shake");
+              setTimeout(() => {
+                hintRef.classList.remove("animate-shake");
+              }, 600);
             }
           }}
-          disabled={!allowNext}
         >
           {currentCardNum == 5 ? "分析" : "Next"}
         </button>
@@ -199,5 +211,38 @@
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+  @keyframes shake {
+    0% {
+      transform: translateX(0);
+    }
+    20% {
+      transform: translateX(-10px);
+    }
+    40% {
+      transform: translateX(10px);
+    }
+    60% {
+      transform: translateX(-10px);
+    }
+    80% {
+      transform: translateX(10px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  @keyframes colorChange {
+    0%,
+    100% {
+      color: initial; /* Set the text color to its initial state */
+    }
+    50% {
+      color: rgb(201, 34, 34); /* Change the text color to red */
+    }
+  }
+
+  .animate-shake {
+    animation: shake 0.5s, colorChange 0.5s; /* Apply both animations */
   }
 </style>

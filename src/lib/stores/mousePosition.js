@@ -1,6 +1,7 @@
 import { readable } from "svelte/store";
 export default readable({ x: 0, y: 0 }, (set) => {
   document.body.addEventListener("touchstart", move);
+  document.body.addEventListener("touchmove", move);
 
   /**
    *
@@ -17,5 +18,6 @@ export default readable({ x: 0, y: 0 }, (set) => {
 
   return () => {
     document.body.removeEventListener("touchstart", move);
+    document.body.removeEventListener("touchmove", move);
   };
 });
