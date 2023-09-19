@@ -251,7 +251,7 @@
           use:scaleCard={300}
         >
           <progress
-            class="absolute bottom-[-30px] left-[50%] translate-x-[-50%] progress w-56"
+            class="absolute top-0 left-[50%] translate-x-[-50%] progress w-56"
             value="0"
             max="100"
           />

@@ -8,6 +8,7 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { dev } from "$app/environment";
+  import gsap from "gsap";
 
   /** @type {import('./$types').PageData} */
   export let data;
@@ -21,6 +22,7 @@
    * @type {HTMLDivElement}
    */
   let hintRef;
+  let playShake = false;
 
   let currentCardNum = 1;
   /**
@@ -187,10 +189,21 @@
                 }
               }
             } else {
-              hintRef.classList.add("animate-shake");
-              setTimeout(() => {
-                hintRef.classList.remove("animate-shake");
-              }, 600);
+              const tl = gsap.timeline();
+              tl.to(hintRef, { x: -10, duration: 0.1, ease: "power1.inOut" })
+                .to(hintRef, { x: 10, duration: 0.1, ease: "power1.inOut" })
+                .to(hintRef, { x: -10, duration: 0.1, ease: "power1.inOut" })
+                .to(hintRef, { x: 10, duration: 0.1, ease: "power1.inOut" })
+                .to(hintRef, { x: -10, duration: 0.1, ease: "power1.inOut" })
+                .to(hintRef, { x: 0, duration: 0.1, ease: "power1.inOut" });
+
+              const colorTl = gsap.timeline();
+              colorTl
+                .to(hintRef, {
+                  color: "red",
+                  duration: 0.5,
+                })
+                .to(hintRef, { color: "rgb(99,53,10)", duration: 0.25 });
             }
           }}
         >

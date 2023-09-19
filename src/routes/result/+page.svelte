@@ -5,10 +5,26 @@
   import gameState from "$lib/stores/gameState";
   import { goto } from "$app/navigation";
   import MyQrCode from "$lib/components/myQrCode.svelte";
+  import { onMount } from "svelte";
   /** @type {import('./$types').PageData} */
   export let data;
 
   let typeIndex = 0;
+  const waitInMin = 2;
+
+  onMount(() => {
+    // set timer if not have touchstart event for 1 min, goto '/'
+    let timer = setTimeout(() => {
+      goto("/");
+    }, 60000 * waitInMin);
+    document.addEventListener("touchstart", () => {
+      console.log("clear");
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        goto("/");
+      }, 60000 * waitInMin);
+    });
+  });
 </script>
 
 <main
