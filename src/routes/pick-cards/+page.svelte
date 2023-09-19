@@ -14,6 +14,7 @@
   import { fade } from "svelte/transition";
   import mousePosition from "$lib/stores/mousePosition";
   import gameState from "$lib/stores/gameState";
+  import Icon from "@iconify/svelte";
 
   gsap.registerPlugin(CustomEase);
 
@@ -210,11 +211,20 @@
   out:fade={{ duration: 400 }}
   class="w-full h-full flex flex-col justify-center items-center relative overflow-clip"
 >
-  <img
-    class=" absolute left-1/2 bottom-[280px] translate-x-[-50%]"
-    src={InfoText}
-    alt="info text"
-  />
+  <div
+    class="absolute left-1/2 bottom-[280px] translate-x-[-50%] flex space-x-2 justify-center items-center pr-4"
+  >
+    <Icon
+      class=" relative top-[-2px]"
+      icon="teenyicons:bulb-off-outline"
+      color="#ffffff"
+      width="48"
+      height="48"
+    />
+    <div class=" font-[300] text-[32px] text-white">
+      點擊興趣卡看詳細說明，<b>長按</b>將想要的卡牌拖至卡匣即可收集
+    </div>
+  </div>
   <div
     bind:this={scrollContainer}
     on:scroll={handleScroll}
