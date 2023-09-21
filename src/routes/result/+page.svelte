@@ -10,23 +10,6 @@
   export let data;
 
   let typeIndex = 0;
-  const waitInMin = 2;
-
-  onMount(() => {
-    // set timer if not have touchstart event for 1 min, goto '/'
-    let timer = setTimeout(() => {
-      gameState.reset();
-      goto("/");
-    }, 60000 * waitInMin);
-    document.addEventListener("touchstart", () => {
-      console.log("clear");
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        gameState.reset();
-        goto("/");
-      }, 60000 * waitInMin);
-    });
-  });
 </script>
 
 <main

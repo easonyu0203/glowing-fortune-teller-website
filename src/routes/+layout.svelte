@@ -5,10 +5,31 @@
   import EarthLongLatitude from "$lib/components/earthLongLatitude.svelte";
   import { gsap } from "gsap";
   import { CustomEase } from "gsap/all";
+  import { onMount } from "svelte";
+  import gameState from "$lib/stores/gameState";
+  import { goto } from "$app/navigation";
 
   gsap.registerPlugin(CustomEase);
   document.addEventListener("contextmenu", function (e) {
     e.preventDefault();
+  });
+
+  const waitInMin = 1;
+
+  onMount(() => {
+    // set timer if not have touchstart event for 1 min, goto '/'
+    let timer = setTimeout(() => {
+      gameState.reset();
+      goto("/");
+    }, 60000 * waitInMin);
+    document.addEventListener("touchstart", () => {
+      console.log("clear");
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        gameState.reset();
+        goto("/");
+      }, 60000 * waitInMin);
+    });
   });
 </script>
 
