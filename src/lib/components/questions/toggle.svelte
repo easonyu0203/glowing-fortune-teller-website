@@ -22,9 +22,7 @@
   style={`background-color:${bgColor} ;`}
 >
   <img src={isOn ? toggleOn : toggleOff} alt="toggleOn" />
-  <div
-    class="text-[32px] no-underline font-[300] text-[#551A19] overflow-x-scroll"
-  >
+  <div class="text-[32px] no-underline font-[300] text-[#551A19]">
     <slot />
   </div>
 </button>
