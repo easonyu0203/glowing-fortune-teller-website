@@ -3,6 +3,11 @@
   import text from "$lib/images/homePage/text.png";
   import MyCard from "$lib/components/myCard.svelte";
   import { fade, fly } from "svelte/transition";
+  import { onMount } from "svelte";
+  import gameState from "$lib/stores/gameState";
+  onMount(() => {
+    gameState.reset();
+  });
 </script>
 
 <div
