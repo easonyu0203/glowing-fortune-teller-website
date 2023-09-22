@@ -34,7 +34,7 @@
         e.currentTarget.scrollLeft / e.currentTarget.clientWidth
       );
     }}
-    class=" flex overflow-x-scroll carousel carousel-center max-w-[1850px] space-x-5 px-14 py-4"
+    class=" flex overflow-x-scroll no-scrollbar carousel carousel-center max-w-[1850px] space-x-5 px-14 py-4"
   >
     {#each data.mostCommonTypes as idx}
       <div class=" carousel-item flex flex-col w-[1640px] h-[680px]">
@@ -55,7 +55,9 @@
                 <div class=" text-[#551A19] text-[36px] font-bold">
                   {entry[0]}
                 </div>
-                <p class=" text-[#6F3D0F] overflow-y-scroll text-[23px]">
+                <p
+                  class=" text-[#6F3D0F] overflow-y-scroll no-scrollbar text-[23px]"
+                >
                   {@html entry[1]}
                 </p>
               </div>
@@ -89,3 +91,16 @@
     >
   </div>
 </main>
+
+<style>
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+</style>
